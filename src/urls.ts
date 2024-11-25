@@ -24,12 +24,22 @@ let getUrls = (urlString: string): string[] => {
         return [
           ...getUrls(decodeURI(path)),
           ...getUrls(decodeURIComponent(path)),
+
+          ...getUrls(decodeURI(atob(path))),
+          ...getUrls(atob(decodeURI(path))),
+
+          ...getUrls(decodeURIComponent(atob(path))),
+          ...getUrls(atob(decodeURIComponent(path))),
         ];
       }),
       ...Array.from(searchParams).flatMap(([, value]: [string, string]) => {
         return [
           ...getUrls(value),
           ...getUrls(decodeURI(value)),
+
+          ...getUrls(atob(value)),
+          ...getUrls(atob(decodeURI(value))),
+          ...getUrls(decodeURI(atob(value))),
           //...getUrls(decodeURIComponent(value)),
         ];
       }),
@@ -37,7 +47,6 @@ let getUrls = (urlString: string): string[] => {
     ])
   );
 };
-
 
 const input = document.getElementById("input");
 const list = document.getElementById("list");
